@@ -1,6 +1,6 @@
 [project]
 name = "hermes-yandex-messenger"
-version = "0.1.0"
+version = "0.1.1"
 description = "Native Yandex Messenger platform plugin for Hermes Agent"
 requires-python = ">=3.11"
 dependencies = ["aiohttp>=3.12,<4"]

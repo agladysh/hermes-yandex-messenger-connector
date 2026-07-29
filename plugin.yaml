@@ -1,7 +1,7 @@
 name: yandex-messenger-platform
 label: Yandex Messenger
 kind: platform
-version: 0.1.0
+version: 0.1.1
 description: >
   Native Yandex Messenger Bot API adapter for Hermes Agent. Supports direct
   messages, allowlisted group chats, polling with durable offsets, an optional
@@ -14,6 +14,7 @@ requires_env:
     prompt: "Yandex Messenger bot OAuth token"
     url: "https://admin.yandex.ru/"
     password: true
+    secret: true
 optional_env:
   - name: YANDEX_MESSENGER_ALLOWED_USERS
     description: "Comma-separated Yandex logins allowed to use Hermes"
@@ -31,3 +32,4 @@ optional_env:
     description: "Random secret embedded in the webhook URL path"
     prompt: "Webhook URL secret"
     password: true
+    secret: true

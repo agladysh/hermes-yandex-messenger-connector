@@ -4,6 +4,11 @@ This guide assumes one Hermes Agent installation and one Yandex Messenger bot.
 Hermes profiles are supported: keep each profile's token, configuration, state,
 and allowlists in that profile's active `HERMES_HOME`.
 
+If an assistant is guiding a person through setup, use the
+[agent-guided human setup runbook](agent-setup-guide.md). It defines who handles
+each step, keeps the bot token out of chat, and includes acceptance and rollback
+checkpoints.
+
 ## 1. Create the Yandex bot
 
 1. Sign in as a Yandex 360 organization administrator at

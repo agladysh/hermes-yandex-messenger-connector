@@ -29,11 +29,25 @@ def main() -> int:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
     sys.path.insert(0, str(source))
 
+    import yaml
     from gateway.config import Platform, PlatformConfig
     from gateway.platform_registry import PlatformEntry, platform_registry
     from gateway.platforms.base import BasePlatformAdapter
 
     import adapter
+
+    manifest = yaml.safe_load(
+        (Path(__file__).resolve().parents[1] / "plugin.yaml").read_text(
+            encoding="utf-8"
+        )
+    )
+    token_spec = next(
+        item
+        for item in manifest["requires_env"]
+        if item["name"] == "YANDEX_MESSENGER_TOKEN"
+    )
+    assert token_spec["password"] is True
+    assert token_spec["secret"] is True
 
     class Context:
         def register_platform(

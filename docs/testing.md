@@ -37,6 +37,8 @@ checkout's own environment, then verify:
 4. the adapter factory accepts a `PlatformConfig`;
 5. config loading preserves the nested `extra` settings;
 6. the standalone sender has the expected cron signature.
+7. the bot-token manifest entry is marked for masked input on both supported
+   setup metadata paths.
 
 The source-level contract smoke test is:
 
@@ -98,7 +100,7 @@ At repository bootstrap:
 
 - syntax compilation: performed;
 - primary-source schema comparison: performed;
-- dependency-backed unit tests: passing (`9 passed`);
+- dependency-backed unit tests: passing (`10 passed`);
 - Hermes source-contract smoke test: passing against the pinned checkout;
 - full installed-Hermes gateway smoke test: pending a full runtime profile;
 - live Yandex tenant test: pending credentials and a test organization.

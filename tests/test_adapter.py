@@ -251,3 +251,27 @@ def test_message_type_prefers_commands_then_media():
         adapter._message_type("", [MessageType.PHOTO.value])
         is MessageType.PHOTO
     )
+
+
+def test_interactive_setup_resets_allow_all(monkeypatch, capsys):
+    saved = {}
+    hermes_cli = types.ModuleType("hermes_cli")
+    config_module = types.ModuleType("hermes_cli.config")
+    secret_module = types.ModuleType("hermes_cli.secret_prompt")
+    config_module.get_env_var = lambda name: (
+        "already-configured" if name == "YANDEX_MESSENGER_TOKEN" else None
+    )
+    config_module.set_env_var = lambda name, value: saved.__setitem__(name, value)
+    secret_module.masked_secret_prompt = lambda prompt: ""
+    hermes_cli.config = config_module
+    hermes_cli.secret_prompt = secret_module
+    monkeypatch.setitem(sys.modules, "hermes_cli", hermes_cli)
+    monkeypatch.setitem(sys.modules, "hermes_cli.config", config_module)
+    monkeypatch.setitem(sys.modules, "hermes_cli.secret_prompt", secret_module)
+    monkeypatch.setattr("builtins.input", lambda prompt: "alice@example.org")
+
+    adapter.interactive_setup()
+
+    assert saved["YANDEX_MESSENGER_ALLOWED_USERS"] == "alice@example.org"
+    assert saved["YANDEX_MESSENGER_ALLOW_ALL_USERS"] == "false"
+    assert "Allow-all disabled" in capsys.readouterr().out

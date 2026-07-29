@@ -1483,6 +1483,11 @@ def interactive_setup() -> None:
         allowed = input("Allowed Yandex logins (comma-separated): ").strip()
         if allowed:
             set_env_var("YANDEX_MESSENGER_ALLOWED_USERS", allowed)
+        # A guided setup must never inherit a permissive value from an earlier
+        # experiment. Operators can opt in again manually, but the wizard
+        # always leaves the connector on the explicit-allowlist path.
+        set_env_var("YANDEX_MESSENGER_ALLOW_ALL_USERS", "false")
+        print("Allow-all disabled; only the explicit login list can authorize.")
     except (EOFError, KeyboardInterrupt):
         print()
 
