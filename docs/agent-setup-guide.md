@@ -22,7 +22,8 @@ conversation and checkpoints.
 ## Rules for the assisting agent
 
 1. **Never ask the human to paste a token into chat.** The bot OAuth token must
-   be entered in a local masked terminal prompt or trusted secret manager.
+   be entered in a local masked terminal prompt, the authenticated dashboard's
+   password-style Keys/Channels field, or a trusted secret manager.
 2. **Never print or read the token back.** Do not run `env`, dump `.env`, add
    shell tracing, include the token on a command line, or copy it into a setup
    report.
@@ -43,9 +44,9 @@ conversation and checkpoints.
    and unrelated settings.
 10. **Report secrets only as `present`, `missing`, or `rotated`.**
 
-If the environment cannot provide a private terminal prompt, pause and ask the
-human to configure the token directly on the host. Do not accept it through the
-conversation as a workaround.
+If the environment cannot provide a private terminal prompt or an authenticated
+dashboard secret field, pause and ask the human to configure the token directly
+on the host. Do not accept it through the conversation as a workaround.
 
 ## Division of work
 
@@ -236,6 +237,107 @@ hermes -p "$TARGET_PROFILE" plugins install \
 
 Do not reinstall with `--force` merely because setup is incomplete; that can
 replace the plugin checkout without fixing profile configuration.
+
+### Hosted dashboard-only installation
+
+Use this path when Hermes is running in Nous-hosted/container mode, the human
+has only the web panels, and the connector repository is private. Hosted Hermes
+uses `/opt/data` as its durable `HERMES_HOME`; do not stage the plugin under
+`/tmp`, because container restarts may discard it.
+
+First look for **Plugins**, **Files**, **Keys** (or **API Keys**), **Config**,
+and **System** in the Hermes dashboard. Their presence identifies a recent
+dashboard with the required management APIs. If **Plugins** or Config's
+**YAML** mode is absent, record the Hermes version from **Status** and update
+the hosted image before continuing.
+
+The Plugins page can clone a public Git URL, but its Git process is deliberately
+non-interactive. A private `owner/repo` install works only when the hosted Git
+process already has a non-interactive credential helper or SSH key. Never put a
+GitHub PAT in the install URL: Git can persist that URL in the plugin checkout,
+and dashboard/proxy logs may retain it.
+
+For a private repository with no host Git credential, use the durable Files
+page instead:
+
+1. Open **Files** at `/opt/data`.
+2. Create `plugins`, then `plugins/yandex-messenger-platform`.
+3. From a trusted local checkout of this repository, upload these three files
+   into that directory:
+   - `plugin.yaml`
+   - `__init__.py`
+   - `adapter.py`
+4. Open **Plugins** and refresh the page. Confirm that
+   `yandex-messenger-platform` appears, then click **Enable**. The dashboard
+   plugin “rescan” control is for browser extensions; a browser refresh is
+   sufficient for the installed-agent-plugin list.
+
+This minimal upload is intentional: those are the complete runtime files.
+Documentation, tests, probes, and Git metadata are not required by the hosted
+adapter. The tradeoff is that the Plugins page cannot use **Git pull** to update
+this uploaded copy; upload replacement runtime files for a future release.
+
+Set credentials without sending them through agent chat:
+
+1. Open **Keys** / **API Keys**.
+2. Under **Custom keys**, add `YANDEX_MESSENGER_TOKEN`; the human enters the
+   value directly in the dashboard and saves it.
+3. Add `YANDEX_MESSENGER_ALLOWED_USERS` with the approved comma-separated
+   employee logins.
+4. Add `YANDEX_MESSENGER_ALLOW_ALL_USERS` with the literal value `false`.
+
+The current dashboard learns the token as a required channel field from the
+running plugin, but it does not import optional environment-field metadata from
+user-installed platform manifests until a dashboard-process restart. Using
+Custom keys is therefore the deterministic first-install path. After the
+dashboard process restarts, **Channels → Yandex Messenger** may expose the
+token directly; leaving a configured field blank preserves its existing value.
+
+Open **Config**, switch to **YAML**, and merge—never replace—the following
+entries. Preserve every pre-existing item in `plugins.enabled`:
+
+```yaml
+plugins:
+  enabled:
+    # ...keep every existing enabled plugin...
+    - yandex-messenger-platform
+
+platforms:
+  yandex_messenger:
+    enabled: true
+    gateway_restart_notification: false
+    typing_indicator: true
+    extra:
+      transport: polling
+      poll_interval_seconds: 1.0
+      poll_limit: 100
+      group_allowed_chats: []
+      group_allow_all: false
+      group_mode: commands
+      channel_mode: off
+      mention_aliases: []
+```
+
+The top-level `platforms` form is used here because that is where the dashboard
+enable/disable control writes. Current Hermes also accepts
+`gateway.platforms`, but mixing both shapes makes browser-managed configuration
+harder to audit.
+
+Finally:
+
+1. In the hosting control panel, restart the Hermes instance/container if that
+   action is available. This makes the long-lived dashboard process discover
+   the newly uploaded Python plugin.
+2. In **System → Gateway**, click **Restart gateway**. A new gateway process
+   discovers the plugin even if an outer instance restart is unavailable.
+3. Inspect **Status** and recent **Logs** for `yandex_messenger`; never reveal
+   or export the environment while diagnosing.
+4. Continue with the real direct-message acceptance test in Phase 6.
+
+If Yandex does not yet appear on **Channels** but the gateway log reports it as
+connected, the connector is running and only the dashboard's in-process
+platform catalog is stale. Restart the hosted instance; do not reinstall or
+weaken authorization.
 
 ## Phase 5 — Configure the safe direct-message baseline
 
