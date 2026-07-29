@@ -42,7 +42,7 @@ token immediately: Yandex shows it once and stores no retrievable copy.
 Install the private repository once its GitHub URL is available:
 
 ```bash
-hermes plugins install OWNER/hermes-yandex-messenger --enable
+hermes plugins install agladysh/hermes-yandex-messenger-connector --enable
 ```
 
 For local development, place or symlink this repository at:

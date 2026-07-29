@@ -23,7 +23,7 @@ plans, and bots interact only with employees of their organization. See the
 From a GitHub repository:
 
 ```bash
-hermes plugins install OWNER/hermes-yandex-messenger --enable
+hermes plugins install agladysh/hermes-yandex-messenger-connector --enable
 ```
 
 Hermes clones the plugin under `$HERMES_HOME/plugins/`. For a local checkout,
