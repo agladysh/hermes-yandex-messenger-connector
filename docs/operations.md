@@ -14,6 +14,9 @@ organization IDs, and `webhook_url`.
 Check these invariants:
 
 - The returned organization is the intended Yandex 360 organization.
+- Every intended direct-message user is an employee of that same organization.
+- No guest, arbitrary consumer user, or federated-company employee is included
+  in the supported audience.
 - `webhook_url` is empty/null for polling mode.
 - `webhook_url` exactly matches the secret effective URL for webhook mode.
 - The token is present only in the active Hermes profile's `.env` or external
@@ -38,6 +41,10 @@ Check these invariants:
 8. Move to `mention` or `all` only after confirming the chat's intended trust
    boundary.
 9. Test file input, file output, an approval prompt, and a gateway restart.
+
+This sequence has not yet been completed by the connector maintainers against
+a live Yandex tenant. Preserve the redacted result rather than inferring
+success from installation or contract tests.
 
 Do not run `yandex_probe.py peek-updates` repeatedly while the gateway is
 polling. Offset zero does not delete updates, but a second reader makes
@@ -187,6 +194,19 @@ Recommended external checks:
 - Add the login to `YANDEX_MESSENGER_ALLOWED_USERS`.
 - Check the employee and bot belong to the same organization and privacy
   settings permit the conversation.
+- An arbitrary consumer user, organization guest, or employee of another
+  organization is not a supported direct-message target.
+
+### Guest or external participant cannot use the bot
+
+This is the documented Yandex product boundary, not a connector allowlist
+problem. Yandex forbids direct bot messages outside the bot's organization and
+explicitly says guests cannot use organization bots. Adding the login to
+`YANDEX_MESSENGER_ALLOWED_USERS` cannot widen that platform boundary.
+
+Federations support cross-company human chat, but Yandex does not document
+federated bot access. Treat it as unsupported until a dedicated test and vendor
+contract establish otherwise.
 
 ### Group message is ignored
 

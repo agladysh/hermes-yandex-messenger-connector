@@ -65,6 +65,8 @@ Yandex 360 test organization/profile and complete this matrix:
 |---|---|
 | Identity | `self/get` returns expected bot login/org; no token in output logs |
 | Direct auth | allowed employee works; disallowed employee is rejected/paired |
+| Outside-org direct | a consumer/external login cannot start or receive a bot DM |
+| Guest boundary | an invited guest cannot use the organization bot |
 | Group allowlist | unlisted chat ignored; listed chat accepted |
 | Activation | `commands`, `mention`, and `all` match documented behavior |
 | Sessions | two DMs and two group users route as configured |
@@ -76,6 +78,10 @@ Yandex 360 test organization/profile and complete this matrix:
 | Retry | simulated `429`/`5xx` yields retry/backoff without token leakage |
 | Cron | `YANDEX_MESSENGER_HOME_CHANNEL` receives detached delivery |
 | Webhook, if used | exact envelope, duplicates, latency, secret path, restart |
+
+If federation use is desired, add a separate test with an employee of a
+federated organization. Do not infer bot access from Yandex's documentation of
+human cross-company chat.
 
 Record date, Yandex tenant type/plan, Hermes SHA, connector SHA, Python version,
 transport, and redacted results in the release notes.
@@ -108,6 +114,10 @@ At repository bootstrap:
 - Hermes source-contract smoke test: passing against the pinned checkout;
 - full installed-Hermes gateway smoke test: pending a full runtime profile;
 - live Yandex tenant test: pending credentials and a test organization.
+
+Therefore, **no end-to-end Yandex tenant test has been run**. No public claim
+should imply that the connector has authenticated a real bot, received an
+employee message, replied to a direct chat, or participated in a Yandex group.
 
 Do not represent the connector as production-validated until all applicable
 gates above are recorded.

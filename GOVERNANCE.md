@@ -24,10 +24,13 @@ same commit:
 - repository name, visibility, license, or installation identifier;
 - plugin ID, platform key, version, or required/optional environment fields;
 - token-entry, secret-custody, authorization, or reporting policy;
+- Yandex plan eligibility, employee/guest/external/federation audience, or
+  organization-membership behavior;
 - polling/webhook, direct/group/channel, or allow-all defaults;
 - managed-host paths, executable locations, dashboard workflow, or restart
   behavior;
 - minimum/pinned Hermes compatibility or validation status;
+- end-to-end or live-tenant acceptance status;
 - renamed, added, removed, or superseded canonical documentation;
 - a live experiment that changes an operational recommendation.
 

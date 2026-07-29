@@ -4,6 +4,12 @@ This guide assumes one Hermes Agent installation and one Yandex Messenger bot.
 Hermes profiles are supported: keep each profile's token, configuration, state,
 and allowlists in that profile's active `HERMES_HOME`.
 
+This connector is limited to employees of the bot's own Yandex 360
+organization. Arbitrary consumer users and organization guests cannot use it;
+federated-organization bot access is undocumented and unsupported. Read
+[Yandex product and audience boundaries](yandex-product-boundaries.md) before
+provisioning an organization or inviting users.
+
 If an assistant is guiding a person through setup, use the
 [agent-guided human setup runbook](agent-setup-guide.md). It defines who handles
 each step, keeps the bot token out of chat, and includes acceptance and rollback
@@ -27,6 +33,11 @@ so confirm that the live plan comparison explicitly includes the Messenger bot
 platform instead of buying by a plan name copied from this guide. See the
 [official bot administration guide](https://yandex.ru/support/yandex-360/business/admin/en/messenger/bot-platform)
 and [official plan comparison](https://yandex.com/support/yandex-360/business/purchase/en/plans/payment-plans).
+
+Do not use a guest invitation as a cheaper substitute for an employee seat:
+Yandex explicitly says guests cannot use organization bots. A personal Yandex
+account may instead be invited as an organization employee without connecting
+a mail domain, but it then belongs to the paid employee population.
 
 ## 2. Install and enable the plugin
 

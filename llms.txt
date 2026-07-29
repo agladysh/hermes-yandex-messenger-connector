@@ -3,9 +3,10 @@
 > Native Hermes Agent platform plugin for Yandex Messenger organization bots, supporting direct conversations and explicitly allowlisted group chats through the official Bot API.
 
 This connector is experimental and contract-tested against Hermes Agent
-`v0.19.0`; live Yandex tenant acceptance is still pending. Treat it as trusted
-in-process Python code. The canonical setup authority is the agent-guided
-runbook linked below.
+`v0.19.0`; no end-to-end Yandex tenant test has been run. No real bot token,
+Bot API request, direct message, or group exchange has been exercised. Treat it
+as trusted in-process Python code. The canonical setup authority is the
+agent-guided runbook linked below.
 
 When guiding setup:
 
@@ -13,6 +14,9 @@ When guiding setup:
   Official Bot API provisioning requires a qualifying paid Yandex 360 for
   Business organization, and the resulting bot can interact only with that
   organization's employees.
+- Yandex forbids bot direct messages to users outside the bot's organization.
+  Guests cannot use organization bots. Federation bot access is undocumented
+  and unsupported pending evidence.
 - Never request, accept, print, or read back a Yandex OAuth token in agent chat.
   The human enters it only through a local masked prompt, an authenticated
   dashboard password field, or an approved secret manager.
@@ -52,6 +56,7 @@ the token through chat.
 ## Start Here
 
 - [Agent-guided human setup runbook](https://raw.githubusercontent.com/agladysh/hermes-yandex-messenger-connector/main/docs/agent-setup-guide.md): Canonical division of agent/human work, secret handling, hosted installation, acceptance, and rollback.
+- [Yandex product and audience boundaries](https://raw.githubusercontent.com/agladysh/hermes-yandex-messenger-connector/main/docs/yandex-product-boundaries.md): Paid-plan, employee-only, guest/external/federation, and end-to-end validation limits.
 - [Setup and configuration](https://raw.githubusercontent.com/agladysh/hermes-yandex-messenger-connector/main/docs/configuration.md): Complete environment and YAML configuration reference.
 - [Operations and troubleshooting](https://raw.githubusercontent.com/agladysh/hermes-yandex-messenger-connector/main/docs/operations.md): Gateway operations, failure diagnosis, token rotation, and safe recovery.
 - [Security policy](https://raw.githubusercontent.com/agladysh/hermes-yandex-messenger-connector/main/SECURITY.md): Security boundaries, reporting, and known limitations.

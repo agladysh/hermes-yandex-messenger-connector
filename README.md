@@ -3,12 +3,23 @@
 A native [Hermes Agent](https://github.com/NousResearch/hermes-agent) platform
 plugin for Yandex Messenger in Yandex 360 for Business.
 
+> **Experimental:** no end-to-end Yandex tenant test has been run. The code is
+> contract-tested and has been installed on managed Hermes `v0.19.0`, but no
+> real bot token, Bot API request, employee message, or group exchange has been
+> exercised. Installation is not acceptance.
+
 It lets employees chat with Hermes in direct messages and allows Hermes to
 participate safely in selected group chats. It uses the official Yandex
 Messenger Bot API—no browser automation, message scraping, MCP bridge, or
 Hermes core fork.
 
-## What works
+This is an internal-organization connector. Yandex documents that bots interact
+only with employees of their own organization, forbids bot direct messages to
+outside users, and says organization guests cannot use bots. It is not a bot
+for arbitrary free/consumer Messenger accounts. See
+[Yandex product and audience boundaries](docs/yandex-product-boundaries.md).
+
+## Implemented and contract-tested
 
 - Direct messages and group chats through the normal Hermes gateway/session
   pipeline
@@ -90,6 +101,7 @@ Do not run a second polling consumer alongside Hermes.
 - [Project and documentation governance](GOVERNANCE.md)
 - [Setup and configuration](docs/configuration.md)
 - [Agent-guided human setup runbook](docs/agent-setup-guide.md)
+- [Yandex product, tenancy, audience, and validation boundaries](docs/yandex-product-boundaries.md)
 - [Operations and troubleshooting](docs/operations.md)
 - [Architecture and security boundaries](docs/architecture.md)
 - [Research trace and primary sources](docs/research.md)

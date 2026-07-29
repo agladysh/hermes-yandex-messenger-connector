@@ -24,6 +24,14 @@ The connector treats four controls as independent:
 
 No one control replaces the others.
 
+Yandex's first control is an upstream product boundary: the Bot API forbids
+direct messages outside the bot's organization, bot-created chats are
+organization-scoped, and guests cannot use organization bots. The Update
+sender does not expose a documented organization ID, so the connector cannot
+independently re-prove tenant membership after delivery. It relies on Yandex
+for that boundary and then narrows access with explicit sender/chat policy.
+Federated-organization bot access is undocumented and unsupported.
+
 ### Secrets
 
 - Store `YANDEX_MESSENGER_TOKEN` and
@@ -83,5 +91,7 @@ prevention remain deployment responsibilities.
   publishes no structured mention field.
 - Immediate webhook acknowledgement leaves an in-process crash window.
 - Channel updates may not carry an employee login; channels default off.
-- This code has not been live-tested without tenant credentials; follow the
-  release gates before production use.
+- No end-to-end Yandex tenant test has been run: no real token authentication,
+  inbound employee message, outbound reply, group exchange, guest rejection,
+  or federation behavior has been observed. Follow the release gates before
+  production use.

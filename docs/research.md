@@ -60,6 +60,10 @@ All web sources below were accessed 2026-07-29.
 | YM-16 | [Manage chats/channels](https://yandex.ru/support/yandex-360/business/messenger/ru/chat/administration-of-chats-and-channels) | Group versus channel behavior and UI participant administration |
 | YM-17 | [Mentions](https://yandex.ru/support/yandex-360/business/messenger/ru/chat/mentions) | User-interface `@` behavior |
 | YM-18 | [Yandex 360 Business plans](https://yandex.com/support/yandex-360/business/purchase/en/plans/payment-plans) | Per-employee paid plans; Messenger is present at the base tier shown there, while bot-platform automation is listed only in a higher tier |
+| YM-19 | [Yandex Messenger guests](https://yandex.ru/support/yandex-360/business/messenger/ru/chat/guests) | Guests may join selected work chats but explicitly cannot use organization bots |
+| YM-20 | [Yandex 360 employees](https://yandex.com/support/yandex-360/business/admin/en/users) | Personal Yandex accounts may join as employees without a mail domain |
+| YM-21 | [Yandex 360 federations](https://yandex.ru/support/yandex-360/business/admin/en/external-contacts/federations) | Human cross-company contacts and chats; no documented bot permission |
+| YM-22 | [Yandex 360 cost calculation](https://yandex.com/support/yandex-360/business/purchase/en/plans/calculate-price) | Plan cost is calculated from the number of employees added to the organization |
 
 Hermes source references:
 
@@ -89,6 +93,11 @@ Hermes source references:
 | YM-10/11/12 + HA-02 | binary media and authenticated downloads | bounded cache helpers and multipart uploads |
 | YM-01/08/15 | organization/private membership constraints | configuration and operations prerequisites |
 | YM-01/18 | Free consumer Messenger and base chat access do not imply Bot API provisioning | require a paid organization plan whose live feature list includes the bot platform |
+| YM-01/08 | Bots are employee-only; direct sends outside the bot organization are prohibited | reject arbitrary-consumer/external audience as unsupported |
+| YM-15 | Bot-created chats contain only the bot organization's participants | public invite flag does not establish an external bot audience |
+| YM-19 | Guests cannot use organization bots | guest access is not a free bot-user tier |
+| YM-20/22 | Personal accounts can be invited as organization employees | supported path for an existing account, with employee billing and membership |
+| YM-21 | Federations document cross-company human chat but not bot use | federation bot access remains unsupported and requires separate evidence |
 
 ## Explicit inferences and unresolved points
 
@@ -114,6 +123,14 @@ These are not presented as documented Yandex guarantees:
    consumer/free bot-registration path was found. Plan names differ between
    current locale and product-generation pages, so capability—not a copied
    name—is the stable prerequisite.
+7. **Non-employee boundary.** YM-08 explicitly rejects direct bot messages to
+   users outside the bot organization, YM-15 restricts bot-created chats to
+   organization participants, and YM-19 says guests cannot use organization
+   bots. This supports a firm employee-only product claim.
+8. **Federation ambiguity.** YM-21 grants employees cross-company human chat
+   within a federation but does not mention bots. The general same-organization
+   bot restriction is not overridden, so federation bot support is not
+   claimed.
 
 ## Tooling trace
 
@@ -143,6 +160,15 @@ This is executed host evidence, not live Yandex acceptance. The report did not
 capture the exact installed connector commit, and it did not test restart
 persistence, gateway/dashboard loading, token configuration, or any Bot API
 behavior.
+
+## End-to-end evidence status
+
+No end-to-end Yandex tenant test has been run. As of 2026-07-29, the project
+has never configured a real Yandex bot token, authenticated `self/get`, polled
+an update, received an employee message, sent a reply, joined a live group, or
+tested guest/federation behavior. All wire and audience behavior remains based
+on official contracts until the live matrix in [testing.md](testing.md) is
+executed and preserved.
 
 ## Revalidation triggers
 

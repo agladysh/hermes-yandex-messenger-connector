@@ -19,6 +19,7 @@ TREE_PREFIX = (
 
 REQUIRED_LOCAL_TARGETS = (
     "docs/agent-setup-guide.md",
+    "docs/yandex-product-boundaries.md",
     "docs/configuration.md",
     "docs/operations.md",
     "SECURITY.md",
@@ -40,6 +41,8 @@ REQUIRED_FACTS = (
     "Installation is not acceptance",
     "Keep the deployment goal active through real acceptance",
     "free consumer Yandex Messenger is not sufficient",
+    "no end-to-end Yandex tenant test has been run",
+    "Guests cannot use organization bots",
 )
 
 LINK_RE = re.compile(r"\[[^\]]+\]\((https?://[^)]+)\)")

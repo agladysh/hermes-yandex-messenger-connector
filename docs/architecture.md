@@ -27,6 +27,26 @@ The detailed choices are in:
 - [ADR-002: polling by default](adr/002-polling-default.md)
 - [ADR-003: shared-chat activation boundary](adr/003-shared-chat-boundary.md)
 
+## Product and tenant boundary
+
+The adapter is an internal-organization transport, not a general consumer
+Messenger integration. Yandex's contracts establish four relevant limits:
+
+1. bot provisioning requires a qualifying paid Yandex 360 for Business
+   organization;
+2. bots interact only with employees of their own organization;
+3. direct Bot API sends to users outside that organization are prohibited; and
+4. organization guests cannot use organization bots.
+
+Bot-created chats and channels are also limited to participants from the bot's
+organization. The Bot API's public invitation-link flag does not override that
+separate participant restriction.
+
+Yandex documents human conversations across federated organizations but does
+not document bot access for federated employees. This project therefore treats
+federated use as unsupported pending explicit evidence. See
+[Yandex product and audience boundaries](yandex-product-boundaries.md).
+
 ## Hermes integration
 
 `register(ctx)` contributes a dynamic platform named `yandex_messenger`.
@@ -65,6 +85,13 @@ Yandex `Update` maps to Hermes `MessageEvent` as follows:
 | `file` | bounded download, cached as document |
 
 Bot-authored (`from.robot=true`) updates are ignored to avoid loops.
+
+The published sender shape does not carry a documented organization ID. The
+connector cannot independently prove that an inbound login belongs to the
+bot's organization; it relies on Yandex's tenant boundary, then applies Hermes
+sender authorization and the connector chat gate. An unexpected guest or
+cross-organization update must be treated as a contract anomaly, not as newly
+supported behavior.
 
 Yandex says private chats have no meaningful chat ID. The counterpart login is
 therefore the durable direct-message route. Prefixing target kinds eliminates

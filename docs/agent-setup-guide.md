@@ -18,8 +18,9 @@ The default outcome is intentionally narrow:
 Commercial boundary: ordinary Yandex Messenger use may be free, but the
 documented Bot API provisioning used by this connector is not. It requires a
 qualifying paid Yandex 360 for Business organization, and the bot can converse
-only with that organization's employees. Confirm this before asking the human
-to perform any token or hosted-panel work.
+only with that organization's employees. Arbitrary consumer users and guests
+cannot use it. Federation bot access is undocumented and unsupported. Confirm
+the audience before asking the human to perform any token or hosted-panel work.
 
 Use [configuration.md](configuration.md) as the complete option reference and
 [operations.md](operations.md) after deployment. This document owns the guided
@@ -53,6 +54,10 @@ conversation and checkpoints.
     and canaries are intermediate checkpoints. When only the human can proceed,
     request one smallest human-only action, explain why, specify the safe
     non-secret response, and resume agent-side work immediately when it arrives.
+12. **Do not promise an external audience.** Yandex documents employee-only
+    bot use, rejects direct bot messages outside the organization, and denies
+    guests access to organization bots. Treat federation use as unsupported
+    until separately evidenced.
 
 If the environment cannot provide a private terminal prompt or an authenticated
 dashboard secret field, pause and ask the human to configure the token directly
@@ -98,6 +103,9 @@ Ask these questions, preferably one short group at a time:
    - a shared room, where `commands` is recommended?
 6. Does the profile contain anything that must not be exposed to every allowed
    participant?
+7. Is every intended participant an employee of the bot's own Yandex 360
+   organization? If not, stop: this connector does not provide the requested
+   audience through the documented Bot API.
 
 Do **not** ask whether the human wants polling or webhook unless they already
 operate public HTTPS ingress. Select polling and explain:
@@ -188,6 +196,11 @@ generations, so verify the capability in the live comparison or the presence
 of **Bots in Yandex Messenger** rather than relying on a copied plan name. The
 bot can interact only with employees of its organization. If the token is
 lost, the administrator must reissue it; reissue revokes the previous token.
+
+If an intended person uses a personal Yandex account, the administrator may
+invite that account as an **employee** without connecting a mail domain. Do not
+invite them merely as a guest for this use: Yandex says guests cannot use
+organization bots, even though guests can participate in some work chats.
 
 Record only:
 

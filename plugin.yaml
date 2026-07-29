@@ -3,10 +3,12 @@ label: Yandex Messenger
 kind: platform
 version: 0.1.1
 description: >
-  Native Yandex Messenger Bot API adapter for Hermes Agent. Supports direct
-  messages, allowlisted group chats, polling with durable offsets, an optional
-  webhook transport, typing indicators, file/image transfer, and native
-  approval and clarification buttons.
+  Experimental native Yandex Messenger Bot API adapter for Hermes Agent,
+  limited by Yandex to employees of one qualifying paid Yandex 360
+  organization. Implements direct messages, allowlisted group chats, polling
+  with durable offsets, an optional webhook transport, typing indicators,
+  file/image transfer, and native approval and clarification buttons. Not yet
+  end-to-end validated against a live Yandex tenant.
 author: Hermes Yandex Messenger Connector contributors
 requires_env:
   - name: YANDEX_MESSENGER_TOKEN
