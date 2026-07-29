@@ -53,7 +53,7 @@ on the host. Do not accept it through the conversation as a workaround.
 | Assisting agent can do | Human must do |
 |---|---|
 | Inspect Hermes/profile/Git readiness | Choose the intended Hermes identity and audience |
-| Verify private-repository access | Sign in to Yandex 360 administration |
+| Verify public-repository access | Sign in to Yandex 360 administration |
 | Install and enable the plugin | Create the bot and securely capture its token |
 | Edit non-secret connector configuration | Enter the token at a local masked prompt |
 | Restart and inspect the gateway | Open the bot and send real test messages |
@@ -143,31 +143,17 @@ hermes profile create yandex-team --clone-from "<source profile>"
 Confirm that the chosen profile already has a working model/provider. This
 connector transports messages; it does not configure inference.
 
-### Private GitHub access
+### GitHub access
 
-The connector repository is private. Check access without cloning secrets:
+The connector repository is public. Check outbound Git/GitHub access:
 
 ```bash
-gh auth status
 git ls-remote \
   https://github.com/agladysh/hermes-yandex-messenger-connector.git HEAD
 ```
 
-If GitHub CLI is authenticated but Git cannot access the repository, ask before
-changing Git credential configuration, then run:
-
-```bash
-gh auth setup-git
-```
-
-SSH is also valid when the host already has an authorized GitHub key:
-
-```bash
-git ls-remote \
-  git@github.com:agladysh/hermes-yandex-messenger-connector.git HEAD
-```
-
-Do not embed a GitHub token in a clone URL or setup transcript.
+No GitHub credential is required. Do not add a token or SSH key to a managed
+host for this install.
 
 ## Phase 3 — Human creates the Yandex bot
 
@@ -228,22 +214,15 @@ plugin ID: yandex-messenger-platform
 platform key: yandex_messenger
 ```
 
-If the host checks out private repositories over SSH, the explicit URL form is:
-
-```bash
-hermes -p "$TARGET_PROFILE" plugins install \
-  git@github.com:agladysh/hermes-yandex-messenger-connector.git --enable
-```
-
 Do not reinstall with `--force` merely because setup is incomplete; that can
 replace the plugin checkout without fixing profile configuration.
 
 ### Hosted dashboard-only installation
 
-Use this path when Hermes is running in Nous-hosted/container mode, the human
-has only the web panels, and the connector repository is private. Hosted Hermes
-uses `/opt/data` as its durable `HERMES_HOME`; do not stage the plugin under
-`/tmp`, because container restarts may discard it.
+Use this path when Hermes is running in Nous-hosted/container mode and the human
+has only the web panels. Hosted Hermes uses `/opt/data` as its durable
+`HERMES_HOME`; do not stage the plugin under `/tmp`, because container restarts
+may discard it.
 
 First look for **Plugins**, **Files**, **Keys** (or **API Keys**), **Config**,
 and **System** in the Hermes dashboard. Their presence identifies a recent
@@ -251,14 +230,13 @@ dashboard with the required management APIs. If **Plugins** or Config's
 **YAML** mode is absent, record the Hermes version from **Status** and update
 the hosted image before continuing.
 
-The Plugins page can clone a public Git URL, but its Git process is deliberately
-non-interactive. A private `owner/repo` install works only when the hosted Git
-process already has a non-interactive credential helper or SSH key. Never put a
-GitHub PAT in the install URL: Git can persist that URL in the plugin checkout,
-and dashboard/proxy logs may retain it.
+The Plugins page can clone the public repository without credentials. Prefer
+installing `agladysh/hermes-yandex-messenger-connector` there. Its Git process
+is deliberately non-interactive, so a failure is a useful signal that the
+managed host denies Git, outbound GitHub access, or durable plugin writes.
 
-For a private repository with no host Git credential, use the durable Files
-page instead:
+If managed-host policy blocks the Plugins installer, use the durable Files page
+instead:
 
 1. Open **Files** at `/opt/data`.
 2. Create `plugins`, then `plugins/yandex-messenger-platform`.
@@ -547,7 +525,7 @@ consume updates simultaneously.
 The assisting agent may say setup is complete only when:
 
 - the selected profile is recorded;
-- private-repository install and plugin enablement are confirmed;
+- public-repository install and plugin enablement are confirmed;
 - token presence is confirmed without disclosure;
 - gateway startup succeeds;
 - one allowed direct-message conversation succeeds;

@@ -39,7 +39,7 @@ Prerequisites:
 Create the bot in `admin.yandex.ru` under **Bots in Yandex Messenger**. Save the
 token immediately: Yandex shows it once and stores no retrievable copy.
 
-Install the private repository once its GitHub URL is available:
+Install from the public GitHub repository:
 
 ```bash
 hermes plugins install agladysh/hermes-yandex-messenger-connector --enable
@@ -92,6 +92,10 @@ Do not run a second polling consumer alongside Hermes.
 - [Testing and release gates](docs/testing.md)
 - [Security policy](SECURITY.md)
 - [Architecture decisions](docs/adr/)
+
+## License
+
+[MIT](LICENSE)
 
 ## Development
 

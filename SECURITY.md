@@ -2,16 +2,16 @@
 
 ## Supported versions
 
-Until the first tagged release, only the latest commit on the private default
-branch is supported. Every release should record the Hermes commit used for its
+Until the first tagged release, only the latest commit on the default branch is
+supported. Every release should record the Hermes commit used for its
 compatibility gate.
 
 ## Reporting
 
-Report vulnerabilities privately to the repository owner or through the
-private GitHub repository's security channel. Do not include a live Yandex
-OAuth token, webhook secret, message content, employee identifiers, or
-attachments in an issue. Rotate any credential that may have been disclosed.
+Report vulnerabilities privately through the repository's GitHub Security
+Advisory page or to the repository owner. Do not include a live Yandex OAuth
+token, webhook secret, message content, employee identifiers, or attachments
+in a public issue. Rotate any credential that may have been disclosed.
 
 ## Security model
 
