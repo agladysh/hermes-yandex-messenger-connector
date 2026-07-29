@@ -23,5 +23,11 @@ Never commit or request a real Yandex token, webhook secret, tenant transcript,
 employee identifier set, `.env`, or hosted profile state. Examples must remain
 synthetic.
 
+Keep an assigned deployment goal active through real acceptance. Artifact
+completion, publication, installation, and canaries are intermediate states.
+If only the human can unlock progress, request one smallest human-only action
+with exact safe instructions and the non-secret response needed to continue;
+never dismiss the human while acceptance remains incomplete.
+
 Run `make check` before committing. Preserve unrelated and pre-existing
 worktree changes.

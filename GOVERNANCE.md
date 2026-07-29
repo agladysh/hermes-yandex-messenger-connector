@@ -34,6 +34,30 @@ same commit:
 The merging maintainer owns this review. Additionally, review `llms.txt` at
 every tagged release even when none of the triggers appears obvious.
 
+## Progress ownership
+
+The deployment goal remains open until the acceptance checkpoint in
+`docs/agent-setup-guide.md` passes or the human explicitly changes or pauses
+the goal. Finishing code, publishing documentation, installing the plugin, or
+passing a canary is progress evidence, not permission to end the deployment
+workflow.
+
+The assisting agent owns continuity:
+
+- complete every safe agent-side action available in the current scope;
+- after each experiment, record the result and advance to the next checkpoint;
+- when progress requires a human-only action, ask for the smallest concrete
+  action that unlocks the next agent-side work;
+- state why only the human can perform it, give the exact safe UI action, say
+  what non-secret response to return, and say what the agent will do next;
+- present one human checkpoint at a time instead of handing over the whole
+  runbook.
+
+A secret boundary pauses only secret entry; it does not pause unrelated
+preparation, verification, documentation, or diagnosis. Do not say “nothing is
+required from you” while an assigned deployment or acceptance goal is
+unfinished.
+
 ## Automated guard
 
 `make docs` runs a dependency-free structural check. It verifies the required

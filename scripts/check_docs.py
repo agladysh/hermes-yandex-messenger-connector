@@ -38,6 +38,7 @@ REQUIRED_FACTS = (
     "/opt/data/plugins/yandex-messenger-platform",
     "Never request, accept, print, or read back a Yandex OAuth token",
     "Installation is not acceptance",
+    "Keep the deployment goal active through real acceptance",
 )
 
 LINK_RE = re.compile(r"\[[^\]]+\]\((https?://[^)]+)\)")
@@ -85,8 +86,17 @@ def main() -> int:
         errors.append("README.md must link GOVERNANCE.md")
 
     governance = (ROOT / "GOVERNANCE.md").read_text(encoding="utf-8")
-    for required in ("llms.txt", "make docs", "make check", "Evergreen triggers"):
-        if required not in governance:
+    governance_flat = " ".join(governance.split())
+    for required in (
+        "llms.txt",
+        "make docs",
+        "make check",
+        "Evergreen triggers",
+        "Progress ownership",
+        "smallest concrete action",
+        "nothing is required from you",
+    ):
+        if required not in governance_flat:
             errors.append(f"GOVERNANCE.md is missing required contract: {required}")
 
     if errors:

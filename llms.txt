@@ -23,6 +23,10 @@ When guiding setup:
   missing; restart/runtime and live Yandex acceptance remain pending.
 - Installation is not acceptance. Restart the gateway and require a real
   allowed-user direct-message test before adding any group.
+- Keep the deployment goal active through real acceptance. If progress needs a
+  human-only action, request the single smallest safe action and the non-secret
+  response needed to resume; do not dismiss the human because an intermediate
+  artifact or canary is complete.
 
 Preferred install identifier:
 

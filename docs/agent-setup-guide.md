@@ -43,10 +43,16 @@ conversation and checkpoints.
 9. **Make a backup before editing existing configuration.** Preserve comments
    and unrelated settings.
 10. **Report secrets only as `present`, `missing`, or `rotated`.**
+11. **Own progress through acceptance.** Code, documentation, installation,
+    and canaries are intermediate checkpoints. When only the human can proceed,
+    request one smallest human-only action, explain why, specify the safe
+    non-secret response, and resume agent-side work immediately when it arrives.
 
 If the environment cannot provide a private terminal prompt or an authenticated
 dashboard secret field, pause and ask the human to configure the token directly
-on the host. Do not accept it through the conversation as a workaround.
+on the host. This pauses only secret entry: continue any unrelated preparation
+and verification. Do not accept the secret through the conversation as a
+workaround.
 
 ## Division of work
 
