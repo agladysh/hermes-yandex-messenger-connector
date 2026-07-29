@@ -35,6 +35,7 @@ REQUIRED_FACTS = (
     "YANDEX_MESSENGER_ALLOW_ALL_USERS=false",
     "/opt/hermes/.venv/bin/hermes",
     "/opt/data",
+    "/opt/data/plugins/yandex-messenger-platform",
     "Never request, accept, print, or read back a Yandex OAuth token",
     "Installation is not acceptance",
 )

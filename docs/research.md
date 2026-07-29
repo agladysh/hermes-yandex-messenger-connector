@@ -120,6 +120,21 @@ The requested local fetch tooling was checked:
 The research therefore used direct first-party Yandex documentation retrieval.
 No third-party blog or unofficial SDK was used as protocol authority.
 
+## Managed-host experiment trace
+
+On 2026-07-29, an operator-preserved experiment against Nous-managed Hermes
+`v0.19.0` first established `/opt/data` write/cleanup, the Hermes CLI at
+`/opt/hermes/.venv/bin/hermes`, Git `2.47.3`, and public GitHub access. A second
+bounded phase installed and enabled plugin `yandex-messenger-platform` version
+`0.1.1` from this public repository at
+`/opt/data/plugins/yandex-messenger-platform`. Blank input skipped the token,
+leaving its generated environment field empty.
+
+This is executed host evidence, not live Yandex acceptance. The report did not
+capture the exact installed connector commit, and it did not test restart
+persistence, gateway/dashboard loading, token configuration, or any Bot API
+behavior.
+
 ## Revalidation triggers
 
 Recheck the primary sources and adapter whenever:

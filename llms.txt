@@ -17,7 +17,10 @@ When guiding setup:
 - Do not put GitHub credentials on a managed host; the repository is public.
 - On the canary-tested Nous managed host, invoke Hermes as
   `/opt/hermes/.venv/bin/hermes` because `hermes` was not on the agent
-  terminal's `PATH`. `/opt/data` is the hosted Hermes data path.
+  terminal's `PATH`. `/opt/data` is the hosted Hermes data path. A bounded
+  install on Hermes `v0.19.0` placed and enabled plugin `0.1.1` at
+  `/opt/data/plugins/yandex-messenger-platform` while leaving the token
+  missing; restart/runtime and live Yandex acceptance remain pending.
 - Installation is not acceptance. Restart the gateway and require a real
   allowed-user direct-message test before adding any group.
 

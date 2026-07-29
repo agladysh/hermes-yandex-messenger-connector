@@ -224,6 +224,14 @@ has only the web panels. Hosted Hermes uses `/opt/data` as its durable
 `HERMES_HOME`; do not stage the plugin under `/tmp`, because container restarts
 may discard it.
 
+Managed-host evidence from 2026-07-29: one bounded CLI experiment on Hermes
+`v0.19.0` successfully installed and enabled manifest version `0.1.1` at
+`/opt/data/plugins/yandex-messenger-platform`. A blank response to the token
+prompt left `YANDEX_MESSENGER_TOKEN` empty. The experiment did not capture the
+installed Git SHA or test restart persistence, gateway/dashboard loading, or
+Yandex. Treat the path and staged secret workflow as observed, but do not
+treat installation as acceptance.
+
 First look for **Plugins**, **Files**, **Keys** (or **API Keys**), **Config**,
 and **System** in the Hermes dashboard. Their presence identifies a recent
 dashboard with the required management APIs. If **Plugins** or Config's
