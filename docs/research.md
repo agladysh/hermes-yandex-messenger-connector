@@ -1,0 +1,132 @@
+# Research trace
+
+Research date: 2026-07-29
+Local timezone: Europe/Moscow
+
+This document records the evidence used to select the architecture and map the
+wire protocol. Yandex facts come from first-party Yandex documentation. Hermes
+facts come from the exact local source revision named below.
+
+## Local source baseline
+
+Hermes Agent:
+
+```text
+path: /Users/agladysh/projects/hermes-agent
+commit: b6729ba90552f11ac1064c3c7dcb7ef20361ef8c
+branch: main
+remote: git@github.com:NousResearch/hermes-agent.git
+```
+
+The following upstream surfaces were inspected:
+
+- repository `AGENTS.md` and third-party integration policy;
+- `gateway/platforms/ADDING_A_PLATFORM.md`;
+- `website/docs/developer-guide/adding-platform-adapters.md`;
+- `gateway/platforms/base.py`;
+- `gateway/config.py`;
+- `gateway/platform_registry.py`;
+- `hermes_cli/plugins.py` and `hermes_cli/plugins_cmd.py`;
+- bundled IRC, LINE, Telegram, Slack, WhatsApp Cloud, Matrix, and Feishu
+  platform adapters;
+- plugin-platform interface tests.
+
+The baseline specifically establishes that third-party product integrations
+belong in standalone plugin repositories, dynamic platforms register through
+`ctx.register_platform`, and `BasePlatformAdapter` is the native conversation
+transport.
+
+## Primary source catalog
+
+All web sources below were accessed 2026-07-29.
+
+| ID | Source | Used for |
+|---|---|---|
+| YM-01 | [Bots in Yandex Messenger](https://yandex.ru/support/yandex-360/business/admin/en/messenger/bot-platform) | Eligible plans, admin creation, employee-only scope, one-time token, token reissue, admin webhook UI |
+| YM-02 | [Bot API overview](https://yandex.ru/dev/messenger/doc/ru/) | Official API status and OAuth model |
+| YM-03 | [Get bot information](https://yandex.ru/dev/messenger/doc/ru/api-requests/bot-info) | `self/get`, identity, organization and webhook fields |
+| YM-04 | [Updates overview](https://yandex.ru/dev/messenger/doc/ru/api-requests/update) | Polling/webhook exclusivity |
+| YM-05 | [Polling updates](https://yandex.ru/dev/messenger/doc/ru/api-requests/update-polling) | Endpoint, offset deletion, limits, Update examples, attachments |
+| YM-06 | [Webhook updates](https://yandex.ru/dev/messenger/doc/ru/api-requests/update-webhook) | Envelope, registration/clear, at-least-once/order/timeouts/retries/retention |
+| YM-07 | [Data types](https://yandex.ru/dev/messenger/doc/ru/data-types) | Chat/Sender/Update, BotRequest, SuggestButtons, directives, deprecations |
+| YM-08 | [Send text](https://yandex.ru/dev/messenger/doc/ru/api-requests/message-send-text) | Targets, 6000 limit, dedupe payload, reply/thread, buttons, restrictions |
+| YM-09 | [Send typing](https://yandex.ru/dev/messenger/doc/ru/api-requests/message-send-typing) | Exact-one target and three-second timeout |
+| YM-10 | [Send file](https://yandex.ru/dev/messenger/doc/ru/api-requests/message-send-file) | Multipart document contract and image quota statement |
+| YM-11 | [Send image](https://yandex.ru/dev/messenger/doc/ru/api-requests/message-send-image) | Multipart image contract |
+| YM-12 | [Get file](https://yandex.ru/dev/messenger/doc/ru/api-requests/message-get-file) | Authenticated download stream |
+| YM-13 | [Text formatting](https://yandex.ru/dev/messenger/doc/ru/formatting) | Supported Markdown-like syntax |
+| YM-14 | [List chats](https://yandex.ru/dev/messenger/doc/ru/api-requests/chat-list) | Operator discovery of bot-visible chats |
+| YM-15 | [Create chat/channel](https://yandex.ru/dev/messenger/doc/ru/api-requests/chat-create) | Bot-created groups, membership, bot becomes admin |
+| YM-16 | [Manage chats/channels](https://yandex.ru/support/yandex-360/business/messenger/ru/chat/administration-of-chats-and-channels) | Group versus channel behavior and UI participant administration |
+| YM-17 | [Mentions](https://yandex.ru/support/yandex-360/business/messenger/ru/chat/mentions) | User-interface `@` behavior |
+
+Hermes source references:
+
+| ID | Source | Used for |
+|---|---|---|
+| HA-01 | [Adding a platform adapter at pinned commit](https://github.com/NousResearch/hermes-agent/blob/b6729ba90552f11ac1064c3c7dcb7ef20361ef8c/gateway/platforms/ADDING_A_PLATFORM.md) | Public adapter/plugin contract |
+| HA-02 | [Base adapter at pinned commit](https://github.com/NousResearch/hermes-agent/blob/b6729ba90552f11ac1064c3c7dcb7ef20361ef8c/gateway/platforms/base.py) | Event, send, media, authorization, lock, sessions |
+| HA-03 | [Platform registry at pinned commit](https://github.com/NousResearch/hermes-agent/blob/b6729ba90552f11ac1064c3c7dcb7ef20361ef8c/gateway/platform_registry.py) | Dynamic platform metadata and detached sender |
+| HA-04 | [Plugin developer guide at pinned commit](https://github.com/NousResearch/hermes-agent/blob/b6729ba90552f11ac1064c3c7dcb7ef20361ef8c/website/docs/developer-guide/plugins/index.md) | Standalone third-party plugin policy |
+
+## Evidence-to-decision matrix
+
+| Evidence | Interpretation | Implementation |
+|---|---|---|
+| HA-01/03/04 | Platform plugin is Hermes' native third-party seam | standalone `kind: platform`; no core/MCP changes |
+| YM-04/05/06 | Update transports are exclusive | explicit `transport`; connect-time conflict check |
+| YM-05 | Positive polling offset deletes earlier updates | atomic profile-local offset; one token lock |
+| YM-06 | Webhook read timeout is one second | validate/schedule/ack immediately |
+| YM-06 | At-least-once webhook | bounded `update_id` dedupe |
+| YM-06/07 | No published signature field/header | polling default; webhook secret path as inferred mitigation |
+| YM-07 | Private chat ID is not meaningful | `login:<sender-login>` direct route |
+| YM-07 | Channel sender may lack login | channels default off |
+| YM-05/07 | Bot receives every joined-chat message; no mention field | separate chat allowlist and textual activation modes |
+| YM-08 | text ≤6000 and `payload_id` dedupes | code-aware 5900 chunks and UUID payload IDs |
+| YM-09 + HA-02 | typing lasts three seconds; Hermes refreshes | native `sendTyping` |
+| YM-07 | old inline keyboard is deprecated | current SuggestButtons/server_action |
+| YM-10/11/12 + HA-02 | binary media and authenticated downloads | bounded cache helpers and multipart uploads |
+| YM-01/08/15 | organization/private membership constraints | configuration and operations prerequisites |
+
+## Explicit inferences and unresolved points
+
+These are not presented as documented Yandex guarantees:
+
+1. **Webhook authenticity mitigation.** Because YM-06 documents no request
+   signature, an unguessable URL path is used. Absence from documentation does
+   not prove no undocumented header exists.
+2. **Mention matching.** YM-17 documents UI mentions, while YM-07's Update has
+   no mention entities. Text matching is a compatibility heuristic.
+3. **Inbound threads.** Outbound methods document `thread_id`, while YM-07's
+   Update does not. The adapter accepts a future/extra field best-effort.
+4. **Existing-chat bot UI.** Generic participant administration is documented;
+   tenant UI availability/search behavior for bot accounts should be confirmed
+   during live acceptance. Bot-created groups via YM-15 are the documented API
+   path.
+5. **Webhook durability.** Immediate `2xx` meets the deadline but acknowledges
+   before agent processing completes. A durable queue is future work.
+
+## Tooling trace
+
+The requested local fetch tooling was checked:
+
+- `/Users/agladysh/projects/thai` was not present.
+- `/Users/agladysh/projects/share-fetch` is specialized for DeepSeek shared
+  conversations, not general documentation extraction.
+- `/Users/agladysh/projects/webeye` is a headless Chromium screenshot/layout
+  diagnostic tool, useful for visual inspection but not superior for this
+  text-first API reference.
+
+The research therefore used direct first-party Yandex documentation retrieval.
+No third-party blog or unofficial SDK was used as protocol authority.
+
+## Revalidation triggers
+
+Recheck the primary sources and adapter whenever:
+
+- Yandex adds a webhook signature;
+- the Update type gains mention/thread/reaction fields;
+- Yandex changes plan availability, organization scope, quotas, or limits;
+- Hermes changes `BasePlatformAdapter`, `PlatformEntry`, plugin discovery, or
+  callback resolver signatures;
+- the pinned Hermes compatibility commit advances for a release.

@@ -1,0 +1,33 @@
+gateway:
+  platforms:
+    yandex_messenger:
+      enabled: true
+      gateway_restart_notification: false
+      typing_indicator: true
+      extra:
+        # Polling is the recommended default: no public ingress is required.
+        transport: polling
+        poll_interval_seconds: 1.0
+        poll_limit: 100
+
+        # Shared-chat safety. The bot ignores every group not explicitly listed.
+        group_allowed_chats:
+          - "0/0/replace-with-the-chat-id"
+        group_allow_all: false
+
+        # off | commands | mention | all
+        group_mode: mention
+        channel_mode: off
+
+        # Optional textual aliases because the Bot API Update schema has no
+        # structured "bot was mentioned" field.
+        mention_aliases:
+          - "@Hermes"
+
+        # Webhook-only settings. Leave unused in polling mode.
+        webhook:
+          host: 127.0.0.1
+          port: 8767
+          path: /yandex-messenger/webhook
+          public_url: "https://messenger-bot.example.org"
+          manage_registration: false

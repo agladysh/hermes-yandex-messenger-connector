@@ -1,0 +1,33 @@
+name: yandex-messenger-platform
+label: Yandex Messenger
+kind: platform
+version: 0.1.0
+description: >
+  Native Yandex Messenger Bot API adapter for Hermes Agent. Supports direct
+  messages, allowlisted group chats, polling with durable offsets, an optional
+  webhook transport, typing indicators, file/image transfer, and native
+  approval and clarification buttons.
+author: Hermes Yandex Messenger Connector contributors
+requires_env:
+  - name: YANDEX_MESSENGER_TOKEN
+    description: "Bot OAuth token issued by the Yandex 360 Business admin console"
+    prompt: "Yandex Messenger bot OAuth token"
+    url: "https://admin.yandex.ru/"
+    password: true
+optional_env:
+  - name: YANDEX_MESSENGER_ALLOWED_USERS
+    description: "Comma-separated Yandex logins allowed to use Hermes"
+    prompt: "Allowed Yandex logins"
+    password: false
+  - name: YANDEX_MESSENGER_ALLOW_ALL_USERS
+    description: "Allow every user visible to the bot (unsafe for production)"
+    prompt: "Allow all users? (true/false)"
+    password: false
+  - name: YANDEX_MESSENGER_HOME_CHANNEL
+    description: "Default login:<login> or chat:<chat-id> target for cron delivery"
+    prompt: "Home channel"
+    password: false
+  - name: YANDEX_MESSENGER_WEBHOOK_SECRET
+    description: "Random secret embedded in the webhook URL path"
+    prompt: "Webhook URL secret"
+    password: true
