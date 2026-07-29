@@ -54,6 +54,7 @@ the token through chat.
 
 ## Optional
 
+- [Project and documentation governance](https://raw.githubusercontent.com/agladysh/hermes-yandex-messenger-connector/main/GOVERNANCE.md): Update triggers, release ownership, and the automated drift gate for this file.
 - [Research trace](https://raw.githubusercontent.com/agladysh/hermes-yandex-messenger-connector/main/docs/research.md): Primary-source findings and unresolved vendor questions.
 - [Architecture decisions](https://github.com/agladysh/hermes-yandex-messenger-connector/tree/main/docs/adr): Why this is a standalone platform plugin using polling by default and a separate shared-chat boundary.
 - [License](https://raw.githubusercontent.com/agladysh/hermes-yandex-messenger-connector/main/LICENSE): MIT.

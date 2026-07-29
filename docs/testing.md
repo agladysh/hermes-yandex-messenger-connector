@@ -18,7 +18,11 @@ uv run --cache-dir .uv-cache pytest -q
 ```bash
 uv run --cache-dir .uv-cache ruff check .
 python3 -m py_compile adapter.py __init__.py scripts/yandex_probe.py
+make docs
 ```
+
+`make docs` enforces the governed `llms.txt` structure, required safety and
+installation facts, canonical link targets, and discovery from README.
 
 ### Hermes compatibility smoke test
 

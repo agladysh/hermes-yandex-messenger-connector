@@ -1,9 +1,12 @@
-.PHONY: check test lint smoke
+.PHONY: check docs test lint smoke
 
-check: lint test smoke
+check: lint docs test smoke
 
 lint:
 	uv run --cache-dir .uv-cache ruff check .
+
+docs:
+	python3 scripts/check_docs.py
 
 test:
 	uv run --cache-dir .uv-cache pytest -q
