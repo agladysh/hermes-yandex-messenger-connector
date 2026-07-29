@@ -1,0 +1,59 @@
+# Hermes Yandex Messenger Connector
+
+> Native Hermes Agent platform plugin for Yandex Messenger organization bots, supporting direct conversations and explicitly allowlisted group chats through the official Bot API.
+
+This connector is experimental and contract-tested against Hermes Agent
+`v0.19.0`; live Yandex tenant acceptance is still pending. Treat it as trusted
+in-process Python code. The canonical setup authority is the agent-guided
+runbook linked below.
+
+When guiding setup:
+
+- Never request, accept, print, or read back a Yandex OAuth token in agent chat.
+  The human enters it only through a local masked prompt, an authenticated
+  dashboard password field, or an approved secret manager.
+- Start with polling, explicit employee logins, direct messages, no groups,
+  `YANDEX_MESSENGER_ALLOW_ALL_USERS=false`, and channels/webhooks disabled.
+- Do not put GitHub credentials on a managed host; the repository is public.
+- On the canary-tested Nous managed host, invoke Hermes as
+  `/opt/hermes/.venv/bin/hermes` because `hermes` was not on the agent
+  terminal's `PATH`. `/opt/data` is the hosted Hermes data path.
+- Installation is not acceptance. Restart the gateway and require a real
+  allowed-user direct-message test before adding any group.
+
+Preferred install identifier:
+
+```text
+agladysh/hermes-yandex-messenger-connector
+```
+
+On the canary-tested managed host, the corresponding command is:
+
+```bash
+/opt/hermes/.venv/bin/hermes plugins install \
+  agladysh/hermes-yandex-messenger-connector --enable
+```
+
+If an agent cannot hand the required secret prompt to the human securely, it
+must skip secret entry and report the token as `missing`; it must not solicit
+the token through chat.
+
+## Start Here
+
+- [Agent-guided human setup runbook](https://raw.githubusercontent.com/agladysh/hermes-yandex-messenger-connector/main/docs/agent-setup-guide.md): Canonical division of agent/human work, secret handling, hosted installation, acceptance, and rollback.
+- [Setup and configuration](https://raw.githubusercontent.com/agladysh/hermes-yandex-messenger-connector/main/docs/configuration.md): Complete environment and YAML configuration reference.
+- [Operations and troubleshooting](https://raw.githubusercontent.com/agladysh/hermes-yandex-messenger-connector/main/docs/operations.md): Gateway operations, failure diagnosis, token rotation, and safe recovery.
+- [Security policy](https://raw.githubusercontent.com/agladysh/hermes-yandex-messenger-connector/main/SECURITY.md): Security boundaries, reporting, and known limitations.
+
+## Implementation
+
+- [Plugin manifest](https://raw.githubusercontent.com/agladysh/hermes-yandex-messenger-connector/main/plugin.yaml): Plugin identity and declared environment fields.
+- [Platform adapter](https://raw.githubusercontent.com/agladysh/hermes-yandex-messenger-connector/main/adapter.py): Hermes platform registration and Yandex Bot API implementation.
+- [Architecture](https://raw.githubusercontent.com/agladysh/hermes-yandex-messenger-connector/main/docs/architecture.md): Identity, routing, authorization, state, and trust boundaries.
+- [Testing and release gates](https://raw.githubusercontent.com/agladysh/hermes-yandex-messenger-connector/main/docs/testing.md): Automated and live acceptance matrices.
+
+## Optional
+
+- [Research trace](https://raw.githubusercontent.com/agladysh/hermes-yandex-messenger-connector/main/docs/research.md): Primary-source findings and unresolved vendor questions.
+- [Architecture decisions](https://github.com/agladysh/hermes-yandex-messenger-connector/tree/main/docs/adr): Why this is a standalone platform plugin using polling by default and a separate shared-chat boundary.
+- [License](https://raw.githubusercontent.com/agladysh/hermes-yandex-messenger-connector/main/LICENSE): MIT.

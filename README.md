@@ -84,6 +84,7 @@ Do not run a second polling consumer alongside Hermes.
 
 ## Documentation map
 
+- [LLM/agent orientation](llms.txt)
 - [Setup and configuration](docs/configuration.md)
 - [Agent-guided human setup runbook](docs/agent-setup-guide.md)
 - [Operations and troubleshooting](docs/operations.md)
