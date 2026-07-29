@@ -4,6 +4,10 @@ Do not paste the bot OAuth token into an AI chat, ticket, or shared terminal
 transcript. If the installer still needs it, the human operator should enter it
 locally at the masked prompt.
 
+The token must come from a bot in a qualifying paid Yandex 360 for Business
+organization. A free consumer Messenger account cannot provision the
+documented Bot API token used by this connector.
+
 Next:
 
 1. Open `docs/agent-setup-guide.md`.

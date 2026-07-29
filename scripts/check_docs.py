@@ -39,6 +39,7 @@ REQUIRED_FACTS = (
     "Never request, accept, print, or read back a Yandex OAuth token",
     "Installation is not acceptance",
     "Keep the deployment goal active through real acceptance",
+    "free consumer Yandex Messenger is not sufficient",
 )
 
 LINK_RE = re.compile(r"\[[^\]]+\]\((https?://[^)]+)\)")

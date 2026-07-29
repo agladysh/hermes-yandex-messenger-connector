@@ -9,6 +9,10 @@ runbook linked below.
 
 When guiding setup:
 
+- The free consumer Yandex Messenger is not sufficient for this connector.
+  Official Bot API provisioning requires a qualifying paid Yandex 360 for
+  Business organization, and the resulting bot can interact only with that
+  organization's employees.
 - Never request, accept, print, or read back a Yandex OAuth token in agent chat.
   The human enters it only through a local masked prompt, an authenticated
   dashboard password field, or an approved secret manager.

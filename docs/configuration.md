@@ -20,8 +20,13 @@ checkpoints.
    revokes the previous token.
 
 Yandex documents bot support only for particular paid Yandex 360 Business
-plans, and bots interact only with employees of their organization. See the
-[official bot administration guide](https://yandex.ru/support/yandex-360/business/admin/en/messenger/bot-platform).
+plans, and bots interact only with employees of their organization. The free
+consumer Messenger client does not provide the documented organization-bot
+token used by this connector. Plan names are changing across Yandex locales,
+so confirm that the live plan comparison explicitly includes the Messenger bot
+platform instead of buying by a plan name copied from this guide. See the
+[official bot administration guide](https://yandex.ru/support/yandex-360/business/admin/en/messenger/bot-platform)
+and [official plan comparison](https://yandex.com/support/yandex-360/business/purchase/en/plans/payment-plans).
 
 ## 2. Install and enable the plugin
 

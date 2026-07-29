@@ -32,7 +32,9 @@ schema does not expose structured mention or inbound thread fields.
 
 Prerequisites:
 
-- A supported Yandex 360 for Business plan and organization-admin access
+- A qualifying **paid** Yandex 360 for Business plan and organization-admin
+  access; the free consumer Messenger does not provide the documented bot
+  provisioning used here
 - A current Hermes Agent installation with messaging dependencies
 - A Yandex Messenger bot OAuth token
 

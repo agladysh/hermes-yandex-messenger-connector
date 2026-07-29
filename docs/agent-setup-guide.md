@@ -15,6 +15,12 @@ The default outcome is intentionally narrow:
 - optionally one allowlisted group in `commands` mode;
 - channels, `group_allow_all`, and webhooks disabled.
 
+Commercial boundary: ordinary Yandex Messenger use may be free, but the
+documented Bot API provisioning used by this connector is not. It requires a
+qualifying paid Yandex 360 for Business organization, and the bot can converse
+only with that organization's employees. Confirm this before asking the human
+to perform any token or hosted-panel work.
+
 Use [configuration.md](configuration.md) as the complete option reference and
 [operations.md](operations.md) after deployment. This document owns the guided
 conversation and checkpoints.
@@ -175,9 +181,13 @@ Use the official administration page:
 
 <https://admin.yandex.ru/>
 
-The organization must have a Yandex 360 Business plan that supports bots. The
-bot can interact only with employees of its organization. If the token is lost,
-the administrator must reissue it; reissue revokes the previous token.
+The organization must have a qualifying paid Yandex 360 Business plan that
+explicitly includes the Messenger bot platform. Free consumer Messenger is not
+enough. Yandex's plan names vary across current locales and product
+generations, so verify the capability in the live comparison or the presence
+of **Bots in Yandex Messenger** rather than relying on a copied plan name. The
+bot can interact only with employees of its organization. If the token is
+lost, the administrator must reissue it; reissue revokes the previous token.
 
 Record only:
 

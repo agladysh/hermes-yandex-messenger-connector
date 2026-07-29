@@ -59,6 +59,7 @@ All web sources below were accessed 2026-07-29.
 | YM-15 | [Create chat/channel](https://yandex.ru/dev/messenger/doc/ru/api-requests/chat-create) | Bot-created groups, membership, bot becomes admin |
 | YM-16 | [Manage chats/channels](https://yandex.ru/support/yandex-360/business/messenger/ru/chat/administration-of-chats-and-channels) | Group versus channel behavior and UI participant administration |
 | YM-17 | [Mentions](https://yandex.ru/support/yandex-360/business/messenger/ru/chat/mentions) | User-interface `@` behavior |
+| YM-18 | [Yandex 360 Business plans](https://yandex.com/support/yandex-360/business/purchase/en/plans/payment-plans) | Per-employee paid plans; Messenger is present at the base tier shown there, while bot-platform automation is listed only in a higher tier |
 
 Hermes source references:
 
@@ -87,6 +88,7 @@ Hermes source references:
 | YM-07 | old inline keyboard is deprecated | current SuggestButtons/server_action |
 | YM-10/11/12 + HA-02 | binary media and authenticated downloads | bounded cache helpers and multipart uploads |
 | YM-01/08/15 | organization/private membership constraints | configuration and operations prerequisites |
+| YM-01/18 | Free consumer Messenger and base chat access do not imply Bot API provisioning | require a paid organization plan whose live feature list includes the bot platform |
 
 ## Explicit inferences and unresolved points
 
@@ -105,6 +107,13 @@ These are not presented as documented Yandex guarantees:
    path.
 5. **Webhook durability.** Immediate `2xx` meets the deadline but acknowledges
    before agent processing completes. A durable queue is future work.
+6. **Commercial boundary.** Yandex markets Messenger access separately from
+   its organization bot platform. YM-01 places bot creation in qualifying paid
+   Yandex 360 Business plans and limits bots to organization employees; YM-18
+   separately shows ordinary Messenger in a lower tier. No official
+   consumer/free bot-registration path was found. Plan names differ between
+   current locale and product-generation pages, so capability—not a copied
+   name—is the stable prerequisite.
 
 ## Tooling trace
 
